@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVP Attendance System - Login</title>
+    
+    <style>
+        /* --- Global Styles and Body Reset --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6; /* Light gray background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* --- Login Container Styling --- */
+        .login-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px; /* Constrain width for better focus */
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+
+        /* --- Input Group and Label Styling --- */
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box; /* Important for padding to stay inside the width */
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #007bff; /* Highlight color on focus */
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        /* --- Button Styling --- */
+        .login-button {
+            width: 100%;
+            background-color: #28a745; /* Green for "Go" action */
+            color: white;
+            padding: 14px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .login-button:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+
+        .login-button:active {
+            transform: translateY(1px);
+        }
+
+        /* --- Hint Text Styling --- */
+        .role-hint {
+            margin-top: 25px;
+            color: #777;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Attendance Portal Login</h1>
+        
+        <form action="/login" method="POST">
+            
+            <div class="input-group">
+                <label for="id_number">ID / Roll No:</label>
+                <input type="text" id="id_number" name="id_number" required placeholder="Enter your ID or Roll Number">
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+            </div>
+            
+            <button type="submit" class="login-button">Log In</button>
+        </form>
+        <p class="role-hint">Use your Admin ID or Student Roll No to access the appropriate dashboard.</p>
+    </div>
+</body>
+</html>
