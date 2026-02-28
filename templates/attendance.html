@@ -188,36 +188,64 @@
     </div>
 
     <div class="main-content">
-        <h1 class="header">Mark Today's Attendance</h1>
+    <h1 class="header">Mark Today's Attendance</h1>
 
-        <div class="form-card">
-            
-            <div class="instruction-box">
-                <p style="margin: 0;">⚠️ **MVP Scope Note:** Uploading a file will automatically mark **ALL** registered students as 'Present' for today's date. No face detection is implemented yet.</p>
-            </div>
-            
-            <form action="/mark_attendance" method="POST" enctype="multipart/form-data">
-                
-                <div class="form-group">
-                    <label>Attendance Date/Time</label>
-                    <p style="margin: 0; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; background-color: #f0f4f8; color: var(--color-text-dark); font-weight: 500;">
-                        Today: <span id="currentDate"></span> at <span id="currentTime"></span>
-                    </p>
-                </div>
-                
-                <div class="form-group">
-                    <label for="group_photo">Upload Group Photo / Attendance File</label>
-                    <input type="file" id="group_photo" name="attendance_file" accept="image/*,.csv" required>
-                </div>
-                
-                <button type="submit" class="submit-btn">Mark Attendance for All</button>
-            </form>
+    <div class="form-card">
+        <div class="instruction-box">
+            <p style="margin: 0;">🟢 **Live Recognition:** Faces are detected in real-time. Attendance is logged to the database only when **Start Scanning** is active.</p>
         </div>
+
+        <div class="form-group">
+            <label for="subject_select">Select Current Subject</label>
+            <select id="subject_select" onchange="updateSubject(this.value)" style="padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; background: white; font-size: 1em; cursor: pointer;">
+                <option value="Maths">Maths</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Biology">Biology</option>
+                <option value="CS">CS</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Real-Time Face Recognition Feed</label>
+            <div style="border-radius: 10px; overflow: hidden; border: 2px solid #e2e8f0; background: #000; aspect-ratio: 4/3;">
+                <img src="/video_feed" style="width: 100%; height: 100%; object-fit: cover; display: block;" alt="Live Stream">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Scanner Controls</label>
+            <div style="display: flex; gap: 10px;">
+                 <button type="button" onclick="controlScanner('start')" class="submit-btn" style="margin-top:0; flex:1;">Start Scanning</button>
+                 <button type="button" onclick="controlScanner('stop')" class="submit-btn" style="margin-top:0; flex:1; background-color: #ef4444;">Stop Scanning</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Session Info</label>
+            <p style="margin: 0; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; background-color: #f0f4f8; color: var(--color-text-dark); font-weight: 500;">
+                <span id="currentDate"></span> | <span id="currentTime"></span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function controlScanner(action) {
+        fetch(`/scanner_control?status=${action}`);
+        console.log("Scanner status changed to: " + action);
+    }
+
+    function updateSubject(subject) {
+        fetch(`/update_subject?subject=${subject}`);
+        console.log("Subject updated to: " + subject);
+    }
+</script>
+                
         
         <div style="margin-top: 30px; text-align: center;">
             <a href="/admin" style="color: var(--color-text-light); text-decoration: none; font-weight: 500;">← Back to Dashboard</a>
         </div>
-    </div>
     
     <script>
         document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
