@@ -2,27 +2,40 @@
   <img src="./img.png" alt="Project Banner" width="100%">
 </p>
 
-# [Project Name] 🎯
+# Smart Attendance tracking system using face detection🎯
 
 ## Basic Details
 
-### Team Name: [Name]
+### Team Name: THE PENGUIN
 
 ### Team Members
-- Member 1: [Name] - [College]
-- Member 2: [Name] - [College]
+- Member 1: DEVANANDA K P - COLLEGE OF ENGINEERING, TRIVANDRUM
+- Member 2: NAYANA VENU - COLLEGE OF ENGINEERING, TRIVANDRUM
 
 ### Hosted Project Link
 [mention your project hosted link here]
 
 ### Project Description
-[2-3 lines about what your project does]
+An app/website that captures a group photo of students in a classroom, automatically detects faces, matches them with pre-registered student profiles, and marks attendance instantly.  
+
 
 ### The Problem statement
-[What problem are you solving?]
+Student attendance management in many colleges is still done manually using paper registers or basic digital entry. This process consumes valuable class time and increases the chances of human error. Teachers may accidentally mark attendance incorrectly, and proxy attendance (students answering for absent friends) reduces the reliability of records. As class sizes increase, maintaining accurate and organized attendance data becomes even more difficult. Records are often scattered, poorly maintained, or not updated in real time, making it hard to track consistent patterns.
+
 
 ### The Solution
-[How are you solving it?]
+How it Addresses the Problem: 
+Removes need for time-consuming manual roll calls.
+Prevents manual errors.
+Ensures real-time attendance records.
+
+Innovation & Uniqueness:
+Group-photo based recognition (faster than scanning one by one). 
+Can be integrated with existing school/college ERP systems. (module based)
+
+Easily scalable for multiple classrooms.
+Offline + online implementation and sync
+
 
 ---
 
@@ -31,25 +44,18 @@
 ### Technologies/Components Used
 
 **For Software:**
-- Languages used: [e.g., JavaScript, Python, Java]
-- Frameworks used: [e.g., React, Django, Spring Boot]
-- Libraries used: [e.g., axios, pandas, JUnit]
-- Tools used: [e.g., VS Code, Git, Docker]
-
-**For Hardware:**
-- Main components: [List main components]
-- Specifications: [Technical specifications]
-- Tools required: [List tools needed]
-
----
+- Languages used: Python,JavaScript (Frontend integration),HTML,CSS
+- Frameworks used: Flask (Backend API Framework)
+- Libraries used: OpenCV (cv2) – Real-time webcam handling and image processing, face_recognition – Face detection and recognition, NumPy – Numerical operations, SQLite3 – Database management, Flask-CORS – Cross-origin API communication, Tkinter – Subject selection GUI
+- Tools used: VS Code, Git, SQLite Database, Web Browser (API testing)
 
 ## Features
 
 List the key features of your project:
-- Feature 1: [Description]
-- Feature 2: [Description]
-- Feature 3: [Description]
-- Feature 4: [Description]
+- Feature 1: multiple face detection at a time
+- Feature 2: shows attendance data analytics
+- Feature 3: Real-Time Face Recognition-Based Attendance - The system uses computer vision to automatically detect and recognize students’ faces through a live webcam feed, eliminating manual attendance marking.
+- Feature 4: 
 
 ---
 
@@ -66,14 +72,6 @@ List the key features of your project:
 ```bash
 [Run commands - e.g., npm start, python app.py]
 ```
-
-### For Hardware:
-
-#### Components Required
-[List all components needed with specifications]
-
-#### Circuit Setup
-[Explain how to set up the circuit]
 
 ---
 
