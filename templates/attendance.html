@@ -209,7 +209,7 @@
         <div class="form-group">
             <label>Real-Time Face Recognition Feed</label>
             <div style="border-radius: 10px; overflow: hidden; border: 2px solid #e2e8f0; background: #000; aspect-ratio: 4/3;">
-                <img src="{{ url_for('video_feed') }}" style="width: 100%; display: block;">
+                <img src="/video_feed" style="width: 100%; display: block;">
 
                 <script>
                     function controlScanner(action) {
@@ -267,6 +267,19 @@
             minute: '2-digit'
         });
     </script>
+
+    <script>
+    function controlScanner(action) {
+        // This sends a background request to Python
+        fetch(`/scanner_control?status=${action}`)
+            .then(response => {
+                if (response.ok) {
+                    console.log("Scanner status sent: " + action);
+                }
+            })
+            .catch(err => console.error("Error: ", err));
+    }
+</script>
 
 </body>
 </html>

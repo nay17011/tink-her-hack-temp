@@ -1,10 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, session, Response
 import cv2
-import face_recognition
 import os
 import numpy as np
 from datetime import datetime
-from database import create_connection # Ensure database.py is in the same folder
+from flask import Flask, render_template, request, redirect, url_for, session, Response
+from database import create_connection
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
@@ -15,77 +14,88 @@ selected_subject = "Maths"
 present_marked = set()
 present_names = set()
 
-# --- LOAD DATASET (Move this from facerecognition.py) ---
-known_encodings = []
-known_names = []
-dataset_path = "dataset"
+# Load OpenCV's built-in face detector (No dlib/face_recognition needed!)
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-if os.path.exists(dataset_path):
-    for file in os.listdir(dataset_path):
-        img_path = os.path.join(dataset_path, file)
-        image = face_recognition.load_image_file(img_path)
-        encodings = face_recognition.face_encodings(image)
-        if encodings:
-            known_encodings.append(encodings[0])
-            known_names.append(os.path.splitext(file)[0])
-    print(f"✅ Loaded {len(known_names)} faces.")
-
-# --- SHARED FUNCTIONS ---
+# --- PERIOD DETECTION ---
 def get_current_period():
     now = datetime.now().time()
-    # Simplified for brevity; keep your original logic here
     if now >= datetime.strptime("09:00", "%H:%M").time() and now < datetime.strptime("10:00", "%H:%M").time():
         return "P1"
-    # ... add your other periods ...
-    return "P6" # Fallback for testing
+    elif now >= datetime.strptime("10:00", "%H:%M").time() and now < datetime.strptime("11:00", "%H:%M").time():
+        return "P2"
+    elif now >= datetime.strptime("11:00", "%H:%M").time() and now < datetime.strptime("12:00", "%H:%M").time():
+        return "P3"
+    elif now >= datetime.strptime("13:00", "%H:%M").time() and now < datetime.strptime("14:00", "%H:%M").time():
+        return "P4"
+    return "P5" # Default for testing
 
-def mark_attendance_db(name):
+# --- ATTENDANCE LOGIC ---
+def mark_attendance(name):
     global present_names, present_marked
     period = get_current_period()
-    if name == "Unknown" or period is None: return
-    
     key = f"{name}_{period}_{selected_subject}"
+    
     if key in present_marked: return
 
     now = datetime.now()
     conn = create_connection()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO attendance (name, date, period, subject, time) VALUES (?, ?, ?, ?, ?)",
-                   (name, now.strftime("%Y-%m-%d"), period, selected_subject, now.strftime("%H:%M:%S")))
+    cursor.execute("""
+        INSERT INTO attendance (name, date, period, subject, time)
+        VALUES (?, ?, ?, ?, ?)
+    """, (name, now.strftime("%Y-%m-%d"), period, selected_subject, now.strftime("%H:%M:%S")))
     conn.commit()
     conn.close()
+    
     present_marked.add(key)
     present_names.add(name)
+    print(f"✅ Marked: {name}")
 
-# --- VIDEO STREAM GENERATOR ---
+# --- VIDEO STREAMING ---
 def gen_frames():
     global scanning_active
-    video = cv2.VideoCapture(0)
+    camera = cv2.VideoCapture(0)
     while True:
-        success, frame = video.read()
+        success, frame = camera.read()
         if not success: break
         
-        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        face_locations = face_recognition.face_locations(rgb_frame)
-        face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
-        for face_encoding, (top, right, bottom, left) in zip(face_encodings, face_locations):
-            name = "Unknown"
-            if known_encodings:
-                distances = face_recognition.face_distance(known_encodings, face_encoding)
-                if np.min(distances) < 0.5:
-                    name = known_names[np.argmin(distances)]
-                    if scanning_active:
-                        mark_attendance_db(name)
-
-            cv2.rectangle(frame, (left, top), (right, bottom), (16, 185, 129), 2)
-            cv2.putText(frame, name, (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (16, 185, 129), 2)
+        for (x, y, w, h) in faces:
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (16, 185, 129), 2)
+            
+            name = "Student Detected" # In Haar, recognition requires a trained .yml file
+            if scanning_active:
+                mark_attendance(name)
+                cv2.putText(frame, "RECORDING", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
 
         ret, buffer = cv2.imencode('.jpg', frame)
-        frame = buffer.tobytes()
-        yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
 
-# --- ROUTES ---
+# --- WEB ROUTES ---
+@app.route('/')
+def home(): return render_template('login.html')
+
+@app.route('/login', methods=['POST'])
+def login():
+    id_num, pw = request.form['id_number'], request.form['password']
+    if id_num == "admin" and pw == "123":
+        session.update({'role': 'admin', 'username': 'admin'})
+        return redirect(url_for('admin'))
+    return "Invalid Login"
+
+@app.route('/admin')
+def admin():
+    if session.get('role') != 'admin': return redirect('/')
+    return render_template('admin_dashboard.html')
+
+@app.route('/attendance')
+def attendance():
+    if 'role' not in session: return redirect('/')
+    return render_template('attendance.html')
+
 @app.route('/video_feed')
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
@@ -96,20 +106,10 @@ def scanner_control():
     scanning_active = (request.args.get('status') == 'start')
     return "OK"
 
-@app.route('/update_subject')
-def update_subject():
-    global selected_subject, present_marked, present_names
-    selected_subject = request.args.get('subject')
-    present_marked.clear()
-    present_names.clear()
-    return "OK"
-
-# ... Keep your existing @app.route('/') through @app.route('/logout') ...
-
-@app.route('/attendance')
-def attendance():
-    if 'role' not in session: return redirect('/')
-    return render_template('attendance.html')
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True)
