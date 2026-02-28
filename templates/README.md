@@ -13,7 +13,7 @@
 - Member 2: NAYANA VENU - COLLEGE OF ENGINEERING, TRIVANDRUM
 
 ### Hosted Project Link
-[mention your project hosted link here]
+https://tink-her-hack-temp-1.onrender.com
 
 ### Project Description
 An app/website that captures a group photo of students in a classroom, automatically detects faces, matches them with pre-registered student profiles, and marks attendance instantly.  
@@ -55,7 +55,7 @@ List the key features of your project:
 - Feature 1: multiple face detection at a time
 - Feature 2: shows attendance data analytics
 - Feature 3: Real-Time Face Recognition-Based Attendance - The system uses computer vision to automatically detect and recognize students’ faces through a live webcam feed, eliminating manual attendance marking.
-- Feature 4: 
+- Feature 4: seperate login for teachers and students
 
 ---
 
@@ -81,14 +81,10 @@ List the key features of your project:
 
 #### Screenshots (Add at least 3)
 
-![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
+<img src = "SCREENSHOTS/SS1.png">
+<img src = "SCREENSHOTS/SS2.png" >
+<img src = "SCREENSHOTS/SS3.jpeg">
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
-
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
 
 #### Diagrams
 
