@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Full Feature</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Color Palette --- */
+        :root {
+            --color-primary: #10b981; /* Emerald Green Accent */
+            --color-primary-dark: #059669;
+            --color-background: #f5f7fa; /* Soft Light Gray Background */
+            --color-surface: #ffffff; /* Pure White Surfaces */
+            --color-text-dark: #1e293b; /* Dark Navy for Headings */
+            --color-text-light: #64748b; /* Soft Gray for Subtext */
+            --shadow-base: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Global Styles & Typography --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-background);
+            margin: 0;
+            padding: 0;
+            color: var(--color-text-dark);
+            min-height: 100vh;
+        }
+
+        /* --- Horizontal Navigation Bar (Sleek and Fixed) --- */
+        .navbar {
+            background-color: var(--color-surface); /* White Navbar */
+            padding: 0 40px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h2 {
+            color: var(--color-text-dark);
+            font-weight: 600;
+            margin: 15px 0;
+            font-size: 1.4em;
+        }
+
+        .nav-links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 20px 18px;
+            text-decoration: none;
+            color: var(--color-text-light);
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-primary);
+        }
+
+        /* Active highlight for current page */
+        .nav-links a.active {
+            color: var(--color-primary);
+            border-bottom: 3px solid var(--color-primary);
+            padding-bottom: 17px;
+        }
+
+        /* --- Main Content Area --- */
+        .main-content {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            color: var(--color-text-dark);
+            font-weight: 700;
+            font-size: 2em;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        /* --- Statistic Cards Layout --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background-color: var(--color-surface);
+            padding: 25px;
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: var(--shadow-base);
+            text-align: left;
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out; /* Smooth animation */
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stat-card h3 {
+            margin-top: 0;
+            color: var(--color-text-light);
+            font-size: 0.9em;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .stat-card .value {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin: 5px 0 0;
+        }
+
+        /* Consistent Accent Color Coding */
+        .stat-card.students .value { color: var(--color-primary); } 
+        .stat-card.present .value { color: #3b82f6; } /* Blue for present/active */
+        .stat-card.total .value { color: #f97316; } /* Orange for total */
+        .stat-card.average .value { color: #8b5cf6; } /* Purple for average */
+
+        /* --- Graph Section Styling --- */
+        .graph-section {
+            background-color: var(--color-surface);
+            padding: 30px;
+            margin-top: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow-base);
+            border: 1px solid #e2e8f0;
+        }
+        .graph-section h2 {
+            color: var(--color-text-dark);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 1.5em;
+        }
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            /* Placeholder styling for a professional look */
+            background-color: var(--color-background); 
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-light);
+        }
+
+        /* --- Quick Action Buttons --- */
+        .action-container {
+            margin-top: 40px;
+            padding: 30px;
+            background-color: var(--color-surface);
+            border-radius: 10px;
+            box-shadow: var(--shadow-base);
+            border: 1px solid #e2e8f0;
+        }
+        .action-container h2 {
+            color: var(--color-text-dark);
+            margin-bottom: 25px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.5em;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .action-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px; /* Consistent rounded corners */
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            text-decoration: none;
+            color: white;
+            text-align: center;
+            flex-grow: 1;
+            max-width: 250px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Using the primary accent color consistently for buttons */
+        .btn-register { background-color: var(--color-primary); }
+        .btn-attendance { background-color: var(--color-primary); }
+        .btn-reports { background-color: var(--color-primary); }
+
+        .btn-register:hover { background-color: var(--color-primary-dark); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(16, 185, 129, 0.4); }
+        .btn-attendance:hover { background-color: var(--color-primary-dark); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(16, 185, 129, 0.4); }
+        .btn-reports:hover { background-color: var(--color-primary-dark); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(16, 185, 129, 0.4); }
+
+
+        /* --- Notes Styling (Blends smoothly) --- */
+        .graph-note {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #ecfdf5; /* Very light primary tone */
+            border: 1px solid #a7f3d0; /* Light primary border */
+            border-radius: 8px;
+            color: #065f46; /* Darker primary text */
+            font-size: 0.9em;
+        }
+        .graph-note strong {
+            font-weight: 700;
+        }
+
+        /* --- Responsiveness --- */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            .navbar {
+                padding: 0 20px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr; /* Two columns on mobile */
+            }
+            .action-buttons {
+                flex-direction: column; /* Stack buttons vertically on small screens */
+            }
+            .action-btn {
+                max-width: none;
+            }
+        }
+        @media (max-width: 480px) {
+             .stats-grid {
+                grid-template-columns: 1fr; /* Single column on very small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h2>Admin Panel</h2>
+        <ul class="nav-links">
+            <li><a href="/admin" class="active">Dashboard</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <h1 class="header">System Overview</h1>
+
+        <div class="stats-grid">
+            <div class="stat-card students">
+                <h3>Total Students</h3>
+                <p class="value">150</p>
+            </div>
+            
+            <div class="stat-card present">
+                <h3>Present Today</h3>
+                <p class="value">135</p>
+            </div>
+
+            <div class="stat-card total">
+                <h3>Total Classes Held (Year)</h3>
+                <p class="value">160</p>
+            </div>
+            
+            <div class="stat-card average">
+                <h3>Overall Avg. Attendance</h3>
+                <p class="value">88.5%</p>
+            </div>
+        </div>
+        
+        <div class="graph-section">
+            <h2>Monthly Attendance Trend (Current Year)</h2>
+            <div class="chart-container">
+                <canvas id="monthlyAttendanceChart"></canvas>
+                
+                <p style="position: absolute; color: var(--color-text-light); pointer-events: none;">Graph Placeholder: Chart.js data visualization will appear here.</p>
+            </div>
+        </div>
+
+        <div class="action-container">
+            <h2>Core Admin Actions</h2>
+            <div class="action-buttons">
+                <a href="/register" class="action-btn btn-register">Register Students</a>
+                <a href="/attendance" class="action-btn btn-attendance">Mark Attendance</a>
+                <a href="/report" class="action-btn btn-reports">View Reports</a>
+            </div>
+        </div>
+        
+        <div class="graph-note">
+            <p>🌟 **Full Feature Note:** The graph above requires integrating a JavaScript library (like Chart.js) and connecting it to a Flask backend route that provides aggregated monthly attendance data. This moves the project into **Version 2 development**.</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

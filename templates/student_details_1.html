@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details | Admin Panel</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Color Palette --- */
+        :root {
+            --color-primary: #10b981; /* Emerald Green Accent */
+            --color-primary-dark: #059669;
+            --color-background: #f5f7fa; /* Soft Light Gray Background */
+            --color-surface: #ffffff; /* Pure White Surfaces */
+            --color-text-dark: #1e293b; /* Dark Navy for Headings */
+            --color-text-light: #64748b; /* Soft Gray for Subtext */
+            --shadow-base: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        /* --- Global Styles & Typography --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-background);
+            margin: 0;
+            padding: 0;
+            color: var(--color-text-dark);
+            min-height: 100vh;
+        }
+
+        /* --- Horizontal Navigation Bar (Sleek and Fixed) --- */
+        .navbar {
+            background-color: var(--color-surface);
+            padding: 0 40px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h2 {
+            color: var(--color-text-dark);
+            font-weight: 600;
+            margin: 15px 0;
+            font-size: 1.4em;
+        }
+
+        .nav-links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 20px 18px;
+            text-decoration: none;
+            color: var(--color-text-light);
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-primary);
+        }
+
+        /* Active highlight (set to Dashboard for navigation consistency) */
+        .nav-links a.active {
+            color: var(--color-primary);
+            border-bottom: 3px solid var(--color-primary);
+            padding-bottom: 17px;
+        }
+
+        /* --- Main Content Area --- */
+        .main-content {
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            color: var(--color-text-dark);
+            font-weight: 700;
+            font-size: 2em;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+        
+        /* --- Details Card Layout --- */
+        .details-container {
+            display: flex;
+            background-color: var(--color-surface);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow-base);
+            border: 1px solid #e2e8f0;
+        }
+
+        /* --- Image Section --- */
+        .image-section {
+            width: 30%;
+            min-width: 180px;
+            padding-right: 30px;
+            border-right: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        
+        .student-photo {
+            width: 100%;
+            padding-top: 100%; /* Creates a square container */
+            background-color: var(--color-background);
+            border: 3px solid #cbd5e1;
+            border-radius: 50%; /* Circular image frame */
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            color: var(--color-text-light);
+            font-weight: 500;
+        }
+
+        /* --- Data Section --- */
+        .data-section {
+            flex-grow: 1;
+            padding-left: 30px;
+        }
+        
+        .data-section h3 {
+            margin-top: 0;
+            color: var(--color-primary-dark);
+            font-weight: 600;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--color-text-dark);
+            font-size: 1em;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            color: var(--color-text-light);
+            text-align: right;
+        }
+
+        /* --- Back Button --- */
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover {
+            color: var(--color-primary);
+        }
+
+        /* --- Responsiveness --- */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            .details-container {
+                flex-direction: column; /* Stack sections vertically */
+            }
+            .image-section {
+                width: 100%;
+                padding-right: 0;
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+            }
+            .data-section {
+                padding-left: 0;
+            }
+            .student-photo {
+                width: 150px;
+                height: 150px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h2>Admin Panel</h2>
+        <ul class="nav-links">
+            <li><a href="/admin" class="active">Dashboard</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <h1 class="header">Student Details: Aisha Khan</h1>
+
+        <div class="details-container">
+            
+            <div class="image-section">
+                <div class="student-photo">
+                     
+                </div>
+                <p style="color: var(--color-text-dark); font-weight: 600; font-size: 1.1em;">Aisha Khan</p>
+                <p style="color: var(--color-text-light); margin-top: 5px; font-size: 0.9em;">(Registered Image)</p>
+            </div>
+            
+            <div class="data-section">
+                <h3>Registration Metadata</h3>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Roll Number / ID</span>
+                    <span class="detail-value">S2023001</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Department</span>
+                    <span class="detail-value">Computer Science</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Academic Year</span>
+                    <span class="detail-value">Third Year</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Registered On</span>
+                    <span class="detail-value">2023-08-15</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Total Classes Attended</span>
+                    <span class="detail-value">145 / 160</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Overall Attendance</span>
+                    <span class="detail-value" style="color: var(--color-primary-dark); font-weight: 700;">90.6%</span>
+                </div>
+
+            </div>
+        </div>
+        
+        <a href="/report" class="back-link">← Back to All Reports</a>
+        
+    </div>
+
+</body>
+</html>

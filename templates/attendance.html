@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Attendance | Admin Panel</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Color Palette --- */
+        :root {
+            --color-primary: #10b981; /* Emerald Green Accent */
+            --color-primary-dark: #059669;
+            --color-background: #f5f7fa; /* Soft Light Gray Background */
+            --color-surface: #ffffff; /* Pure White Surfaces */
+            --color-text-dark: #1e293b; /* Dark Navy for Headings */
+            --color-text-light: #64748b; /* Soft Gray for Subtext */
+            --shadow-base: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        /* --- Global Styles & Typography --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-background);
+            margin: 0;
+            padding: 0;
+            color: var(--color-text-dark);
+            min-height: 100vh;
+        }
+
+        /* --- Horizontal Navigation Bar (Sleek and Fixed) --- */
+        .navbar {
+            background-color: var(--color-surface);
+            padding: 0 40px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h2 {
+            color: var(--color-text-dark);
+            font-weight: 600;
+            margin: 15px 0;
+            font-size: 1.4em;
+        }
+
+        .nav-links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 20px 18px;
+            text-decoration: none;
+            color: var(--color-text-light);
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-primary);
+        }
+
+        /* Highlight the active page */
+        .nav-links a.active {
+            color: var(--color-primary);
+            border-bottom: 3px solid var(--color-primary);
+            padding-bottom: 17px;
+        }
+
+        /* --- Main Content Area --- */
+        .main-content {
+            padding: 40px;
+            max-width: 600px; /* Narrower content area for focus */
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            color: var(--color-text-dark);
+            font-weight: 700;
+            font-size: 2em;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            text-align: left;
+        }
+        
+        /* --- Attendance Form Card Styling --- */
+        .form-card {
+            background-color: var(--color-surface);
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow-base);
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+        
+        .instruction-box {
+            background-color: #ecfdf5; /* Very light primary tone */
+            border: 1px dashed #a7f3d0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            color: #065f46;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--color-text-dark);
+            font-size: 0.9em;
+        }
+
+        /* Custom style for the file input */
+        input[type="file"] {
+            padding: 15px; /* Larger padding for click area */
+            border: 2px dashed #cbd5e1; /* Dashed border for visual cue */
+            border-radius: 8px;
+            font-size: 1em;
+            color: var(--color-text-dark);
+            background-color: var(--color-background);
+            transition: border-color 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        input[type="file"]:hover {
+            border-color: var(--color-primary);
+        }
+
+        /* --- Submit Button --- */
+        .submit-btn {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--color-primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.4);
+        }
+        
+        /* --- Responsiveness --- */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            .navbar {
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h2>Admin Panel</h2>
+        <ul class="nav-links">
+            <li><a href="/admin">Dashboard</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <h1 class="header">Mark Today's Attendance</h1>
+
+        <div class="form-card">
+            
+            <div class="instruction-box">
+                <p style="margin: 0;">⚠️ **MVP Scope Note:** Uploading a file will automatically mark **ALL** registered students as 'Present' for today's date. No face detection is implemented yet.</p>
+            </div>
+            
+            <form action="/mark_attendance" method="POST" enctype="multipart/form-data">
+                
+                <div class="form-group">
+                    <label>Attendance Date/Time</label>
+                    <p style="margin: 0; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; background-color: #f0f4f8; color: var(--color-text-dark); font-weight: 500;">
+                        Today: <span id="currentDate"></span> at <span id="currentTime"></span>
+                    </p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="group_photo">Upload Group Photo / Attendance File</label>
+                    <input type="file" id="group_photo" name="attendance_file" accept="image/*,.csv" required>
+                </div>
+                
+                <button type="submit" class="submit-btn">Mark Attendance for All</button>
+            </form>
+        </div>
+        
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="/admin" style="color: var(--color-text-light); text-decoration: none; font-weight: 500;">← Back to Dashboard</a>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        document.getElementById('currentTime').textContent = new Date().toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    </script>
+
+</body>
+</html>

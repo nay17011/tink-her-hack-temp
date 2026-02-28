@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Reports | Admin Panel</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Color Palette --- */
+        :root {
+            --color-primary: #10b981; /* Emerald Green Accent */
+            --color-primary-dark: #059669;
+            --color-background: #f5f7fa; /* Soft Light Gray Background */
+            --color-surface: #ffffff; /* Pure White Surfaces */
+            --color-text-dark: #1e293b; /* Dark Navy for Headings */
+            --color-text-light: #64748b; /* Soft Gray for Subtext */
+            --shadow-base: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        /* --- Global Styles & Typography --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-background);
+            margin: 0;
+            padding: 0;
+            color: var(--color-text-dark);
+            min-height: 100vh;
+        }
+
+        /* --- Horizontal Navigation Bar (Sleek and Fixed) --- */
+        .navbar {
+            background-color: var(--color-surface);
+            padding: 0 40px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h2 {
+            color: var(--color-text-dark);
+            font-weight: 600;
+            margin: 15px 0;
+            font-size: 1.4em;
+        }
+
+        .nav-links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 20px 18px;
+            text-decoration: none;
+            color: var(--color-text-light);
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-primary);
+        }
+
+        /* Highlight the active page */
+        .nav-links a.active {
+            color: var(--color-primary);
+            border-bottom: 3px solid var(--color-primary);
+            padding-bottom: 17px;
+        }
+
+        /* --- Main Content Area --- */
+        .main-content {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            color: var(--color-text-dark);
+            font-weight: 700;
+            font-size: 2em;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+        
+        /* --- Table Container and Styling --- */
+        .table-card {
+            background-color: var(--color-surface);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: var(--shadow-base);
+            border: 1px solid #e2e8f0;
+            overflow-x: auto; /* Ensures responsiveness for wide tables */
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 800px; /* Minimum width to prevent crushing on small desktops */
+        }
+
+        .report-table th, .report-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .report-table th {
+            background-color: var(--color-background);
+            color: var(--color-text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .report-table tr:hover {
+            background-color: #f0f4f8; /* Light hover effect on rows */
+        }
+        
+        /* Specific data cell styling */
+        .percent-good { color: var(--color-primary-dark); font-weight: 600; }
+        .percent-bad { color: #ef4444; font-weight: 600; } /* Red for low attendance */
+
+        /* --- Detail Button Styling --- */
+        .detail-link {
+            padding: 8px 15px;
+            border: 1px solid var(--color-primary);
+            border-radius: 5px;
+            text-decoration: none;
+            color: var(--color-primary);
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .detail-link:hover {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        /* --- MVP Omissions Notice --- */
+        .notice-box {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fffbeb;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            color: #b45309;
+            font-size: 0.9em;
+        }
+
+        /* --- Responsiveness --- */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            .navbar {
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h2>Admin Panel</h2>
+        <ul class="nav-links">
+            <li><a href="/admin">Dashboard</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <h1 class="header">System-Wide Attendance Reports</h1>
+
+        <div class="table-card">
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Roll No</th>
+                        <th>Student Name</th>
+                        <th>Department</th>
+                        <th>Present Days</th>
+                        <th>Absent Days</th>
+                        <th>Attendance %</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>S2023001</td>
+                        <td>Aisha Khan</td>
+                        <td>CS</td>
+                        <td>145</td>
+                        <td>15</td>
+                        <td class="percent-good">90.6%</td>
+                        <td><a href="/student_details?id=001" class="detail-link">View Details</a></td>
+                    </tr>
+                    <tr>
+                        <td>S2023002</td>
+                        <td>Ben Carter</td>
+                        <td>EE</td>
+                        <td>120</td>
+                        <td>40</td>
+                        <td class="percent-bad">75.0%</td>
+                        <td><a href="/student_details?id=002" class="detail-link">View Details</a></td>
+                    </tr>
+                    <tr>
+                        <td>S2023003</td>
+                        <td>Cathy Lu</td>
+                        <td>ME</td>
+                        <td>155</td>
+                        <td>5</td>
+                        <td class="percent-good">96.9%</td>
+                        <td><a href="/student_details?id=003" class="detail-link">View Details</a></td>
+                    </tr>
+                    <tr>
+                        <td>S2023004</td>
+                        <td>David Kim</td>
+                        <td>CS</td>
+                        <td>130</td>
+                        <td>30</td>
+                        <td class="percent-good">81.3%</td>
+                        <td><a href="/student_details?id=004" class="detail-link">View Details</a></td>
+                    </tr>
+                    </tbody>
+            </table>
+        </div>
+        
+        <div class="notice-box">
+            <p style="margin: 0;">⚠️ **Scope Reminder:** This table is unfiltered. Features like date range filtering, department dropdowns, and CSV export are reserved for future versions.</p>
+        </div>
+        
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="/admin" style="color: var(--color-text-light); text-decoration: none; font-weight: 500;">← Back to Dashboard</a>
+        </div>
+    </div>
+
+</body>
+</html>
