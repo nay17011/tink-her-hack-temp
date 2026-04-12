@@ -111,7 +111,17 @@ def scanner_control():
 def logout():
     session.clear()
     return redirect('/')
-
+    
+@app.route('/profile')
+def profile():
+    if 'role' not in session:
+        return redirect('/')
+    
+    if session['role'] == 'admin':
+        return render_template('profile.html') # your admin profile file
+    elif session['role'] == 'student':
+        return render_template('student_profile.html')
+    
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     debug = os.environ.get('FLASK_ENV') == 'development'
