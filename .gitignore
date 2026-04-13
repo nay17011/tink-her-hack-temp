@@ -5,3 +5,6 @@ my_env
 .DS_Store
 .env
 *.log
+dataset/
+attendance.db
+my_env/
